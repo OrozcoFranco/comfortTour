@@ -5,6 +5,8 @@ import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './user/user.module';
 import { ConfigModule} from '@nestjs/config';
+import { AppNestModule } from './mcp/mcp.module';
+
 
 @Module({
   imports: [
@@ -13,7 +15,8 @@ import { ConfigModule} from '@nestjs/config';
     }),
     MongooseModule.forRoot('mongodb://localhost/proyectoFinal'),
     AuthModule,
-    UsersModule
+    UsersModule,
+    AppNestModule,
   ],
   controllers: [AppController],
   providers: [AppService],

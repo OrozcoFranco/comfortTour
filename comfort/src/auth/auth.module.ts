@@ -5,9 +5,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Login, LoginSchema} from 'src/schemas/login.schema';
 import { UsersModule } from 'src/user/user.module';
-import { jwtConstants} from './JWT/jwt.constant'
+import { jwtConstants} from './jwt/jwt.constant'
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from './jwt.auth';
+import { JwtStrategy } from './jwt/jwt.strategy';
 
 @Module({
   imports: [
@@ -24,6 +24,6 @@ import { JwtStrategy } from './jwt.auth';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
-  exports: [JwtModule, PassportModule]
+  exports: [JwtModule, PassportModule, AuthService]
 })
 export class AuthModule {}

@@ -20,8 +20,14 @@ export default function LoginView() {
     const handleLogin = async ( formData : LoginForm) => { 
         try {
             const { data } = await api.post(`/auth/login`, formData)
-            localStorage.setItem('AUTH_TOKEN', data.accessToken)
-            toast.success('Login exitoso')
+            localStorage.setItem('token', data.accessToken)
+            toast.success('Login exitoso',{
+                style: {
+                    background: '#ffffff',
+                    color: '#1e293b',
+                    borderBottom: '4px solid "10b981'
+                }
+            })
             navigate('/users')
         } catch (error) {
             if (isAxiosError(error) && error.response) {

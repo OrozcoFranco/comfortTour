@@ -20,6 +20,35 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "types": ["node"]
   }
 }
+
+// {
+//   "compilerOptions": {
+//     "module": "commonjs",                  // 👈 Import sin .js
+//     "target": "es2019",                    // Compatible con Node 18+
+//     "lib": ["es2020"],
+//     "declaration": true,
+//     "sourceMap": true,
+//     "outDir": "./dist",
+//     "removeComments": true,
+
+//     "strict": true,
+//     "noImplicitAny": false,
+//     "strictNullChecks": true,
+//     "strictBindCallApply": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "noFallthroughCasesInSwitch": true,
+
+//     "esModuleInterop": true,               // 👈 Permite imports tipo ES
+//     "allowSyntheticDefaultImports": true,
+//     "resolveJsonModule": true,
+//     "incremental": true,
+
+//     "skipLibCheck": true                   // 👈 Ignora tipos rotos de libs externas (MCP SDK)
+//   },
+//   "include": ["src/**/*"],
+//   "exclude": ["node_modules", "dist"]
+// }

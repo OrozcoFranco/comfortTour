@@ -1,26 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument } from './schemas/user.schema';
+import { CreateFormDto } from './dto/createForm.dto';
+import { FormPreferences } from 'src/schemas/formPreference';
+import { McpService } from '../mcp/mcp.service';
+
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) { }
+    constructor(
+        @InjectModel(FormPreferences.name)
+        private readonly travelModel: Model<FormPreferences>,
+    ) { }
 
-    async findByEmail(email: string): Promise<User | null> {
-        return this.userModel.findOne({ email }).exec();
+    async savePreferences(userId: string, dto: CreateFormDto) {
+        // Guardar los datos del formulario en MongoDB
+        await this.travelModel.create({ ...dto, user: userId });
     }
 
-    async findById(id: string): Promise<User | null> {
-        return this.userModel.findById(id).select('_id fullname email').lean();
-    }
-
-    async findAll(): Promise<User[]> {
-        return this.userModel.find().exec();
-    }
-
-    async create(userData: Partial<User>): Promise<User> {
-        const newUser = new this.userModel(userData);
-        return newUser.save();
-    }
 }
