@@ -14,7 +14,7 @@ export class CreateFormDto {
         /^(?:\d{4}-\d{2}-\d{2}|\d{2}\/\d{2}\/\d{4})$/,
         { message: 'La fecha debe estar en formato YYYY-MM-DD o DD/MM/YYYY' }
     )
-    date ?: string;
+    date: string;
 
     @IsNumber()
     @IsNotEmpty({ message: 'Este campo es obligatorio' })

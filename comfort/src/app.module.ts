@@ -6,6 +6,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './user/user.module';
 import { ConfigModule} from '@nestjs/config';
 import { AppNestModule } from './mcp/mcp.module';
+import { ReservasController } from './reserver/reserver.controller';
+import { ReservasModule } from './reserver/reserver.module';
 
 
 @Module({
@@ -13,12 +15,13 @@ import { AppNestModule } from './mcp/mcp.module';
     ConfigModule.forRoot({
       isGlobal: true
     }),
-    MongooseModule.forRoot('mongodb://localhost/proyectoFinal'),
+    MongooseModule.forRoot(process.env.MONGO_URI||''),
     AuthModule,
     UsersModule,
     AppNestModule,
+    ReservasModule
   ],
-  controllers: [AppController],
+  controllers: [AppController, ReservasController],
   providers: [AppService],
 })
 export class AppModule {}

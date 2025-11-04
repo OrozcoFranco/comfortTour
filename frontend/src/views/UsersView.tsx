@@ -31,7 +31,6 @@ export default function UsersView() {
                 <nav className="mt-10">
                     <Link
                         className="bg-slate-800 p-3 text-lg w-full uppercase text-white rounded-lg font-bold cursor-pointer"
-                        //className="text-center text-slate-800 text-lg block hover:underline"
                         to="/form"
                     >
                         Descubrir mis opciones

@@ -10,7 +10,9 @@ export default function registerView() {
 
     const initialValues: RegisterForm = {
         fullname: '',
+        dni: '',
         email: '',
+        phone: '',
         password: '',
         password_confirmation: ''
     }
@@ -59,6 +61,27 @@ export default function registerView() {
                     {errors.fullname && <ErrorMessage>{errors.fullname.message}</ErrorMessage>}
                 </div>
 
+                <div className="grid grid-cols-1 space-y-2">
+                    <label htmlFor="dni" className="text-xl text-slate-600 font-semibold">
+                        D.N.I
+                    </label>
+                    <input 
+                        id="dni"
+                        type="text" 
+                        placeholder="D.N.I"
+                        className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
+                        {...register('dni',{
+                            required: " El D.N.I es obligatorio",
+                            pattern: {
+                                value: /^[0-9]{7,8}$/,
+                                message: "Debe contener solo números (7 u 8 dígitos)",
+                            }
+                        })}
+                    />
+
+                    {errors.dni && <ErrorMessage>{errors.dni?.message}</ErrorMessage>}
+                </div>
+
                 
                 <div className="grid grid-cols-1 space-y-2">
                     <label htmlFor="email" className="text-xl text-slate-600 font-semibold">
@@ -83,6 +106,31 @@ export default function registerView() {
 
                 
                 <div className="grid grid-cols-1 space-y-2">
+                    <label htmlFor="phone" className="text-xl text-slate-600 font-semibold">
+                        Phone
+                    </label>
+                    <input
+                        id="phone"
+                        type="tel" 
+                        placeholder="Teléfono"
+                        className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
+                        {...register('phone',{
+                            required: " El telefono es obligatorio",
+                            minLength:{
+                                value: 10,
+                                message: "El número debe ser mínimo de 10 caracteres"
+                            },
+                            pattern:{
+                                value: /^[0-9]+$/,
+                                message: "Solo se permiten números",
+                            }
+                        })}
+
+                    />
+                    {errors.phone && <ErrorMessage>{errors.phone?.message}</ErrorMessage>}
+
+                </div>
+                <div className="grid grid-cols-1 space-y-2">
                     <label htmlFor="password" className="text-xl text-slate-600 font-semibold">
                         Password
                     </label>
@@ -105,7 +153,7 @@ export default function registerView() {
                 </div>
 
                 <div className="grid grid-cols-1 space-y-2">
-                    <label htmlFor="password_confirmation" className="text-2xl text-slate-500">Repetir Password</label>
+                    <label htmlFor="password_confirmation" className="text-xl text-slate-600 font-semibold">Repetir Password</label>
                     <input
                         id="password_confirmation"
                         type="password"

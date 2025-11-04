@@ -13,6 +13,6 @@ import { McpService } from '../mcp/mcp.service';
   ])],
   providers: [UsersService, McpService],
   controllers: [UsersController],
-  exports: [UsersService], // Para que AuthService lo pueda usar
+  exports: [UsersService],
 })
 export class UsersModule { }

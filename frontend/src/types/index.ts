@@ -7,6 +7,8 @@ export type UserFront = {
 }
 
 export type RegisterForm = Pick< UserFront, 'fullname' |'email'> & {
+    dni: string,
+    phone: string,
     password: string,
     password_confirmation: string
 }

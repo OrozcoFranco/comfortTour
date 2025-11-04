@@ -11,23 +11,61 @@ export class McpService implements OnModuleInit {
     this.mcpServer = await startMcpServer();
   }
 
-  async generarRecomendaciones(dto: CreateFormDto): Promise<string> {
-    // Categorías predefinidas
-    const categorias = ["gastronomía", "cultura", "aventura", "naturaleza", "vino"];
-
-    // Construimos prompt usando los campos de dto
-    const prompt = `
-Genera un itinerario de viaje para ${dto.stay} días en ${dto.city}.
-Intereses: ${dto.interests.join(", ")}.
-Presupuesto: ${dto.budget}.
-Utiliza únicamente estas categorías: ${categorias.join(", ")}.
-Haz recomendaciones muy cortas, máximo 2-3 líneas cada una.
-No escribas explicaciones largas ni párrafos.
-Formato: lista numerada de 3-5 recomendaciones.
-`;
-
-    // Llamamos al MCP
-    return await generarRecomendacionesMCP(prompt);
+  // 🧭 Función auxiliar para determinar estación
+  private obtenerEstacion(fecha: string): string {
+    const month = new Date(fecha).getMonth() + 1;
+    if ([12, 1, 2].includes(month)) return "verano";
+    if ([3, 4, 5].includes(month)) return "otoño";
+    if ([6, 7, 8].includes(month)) return "invierno";
+    return "primavera";
   }
 
+  async generarRecomendaciones(dto: CreateFormDto): Promise<string> {
+    const categorias = ["gastronomía", "cultura", "aventura", "naturaleza", "vino"];
+    const estacion = this.obtenerEstacion(dto.date);
+
+    // Prompt de recomendaciones de viaje
+    const promptViaje = `
+    Genera una lista numerada de recomendaciones de viaje para ${dto.stay} días en ${dto.city}.
+    Intereses del usuario: ${dto.interests.join(", ")}.
+    Presupuesto estimado: ${dto.budget}.
+    Usa únicamente estas categorías: ${categorias.join(", ")}.
+
+    🔹 IMPORTANTE:
+    - Menciona lugares, restaurantes, bodegas o atracciones TURÍSTICAS REALES que existan en ${dto.city}.
+    - Usa nombres exactos que se puedan encontrar en Google Maps.
+    - Cada línea debe contener una recomendación breve (máximo 2 líneas).
+    - Formato: "1. Nombre del lugar (Zona o barrio) — breve descripción".
+    - Devuelve solo la lista numerada, sin explicaciones ni texto adicional.
+    `;
+
+    // Prompt de recomendaciones para la valija
+    const promptValija = `
+    Estás planificando un viaje a ${dto.city} en ${estacion}.
+    Basándote en el clima típico de ${dto.city} en ${estacion}, 
+    sugiere qué ropa y elementos llevar en la valija.
+
+    🔹 Formato esperado:
+    "Ropa recomendada:", 
+    "Accesorios sugeridos:", 
+    "Consejos adicionales:".
+
+    Mantén las recomendaciones prácticas y breves (máx. 2 líneas por ítem).
+    `;
+
+    // Llamamos al MCP para ambos prompts
+    const [recomendacionesViaje, recomendacionesValija] = await Promise.all([
+      generarRecomendacionesMCP(promptViaje),
+      generarRecomendacionesMCP(promptValija),
+    ]);
+
+    // Combinamos los resultados en un texto final
+    return `
+**Recomendaciones de viaje:**
+${recomendacionesViaje}
+
+**Recomendaciones para la valija (${estacion} en ${dto.city}):**
+${recomendacionesValija}
+    `;
+  }
 }

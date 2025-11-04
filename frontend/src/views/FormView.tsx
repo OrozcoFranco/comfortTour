@@ -5,11 +5,11 @@ import api from "../config/axios";
 import ErrorMessage from "../components/ErrorMessage";
 import type { TypeForm } from "../types/forms";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react"; 
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 export default function PlanificarViaje() {
-  const [loading, setLoading] = useState(false)
-
+  const [loading, setLoading] = useState(false);
   const initialValues: TypeForm = {
     numberOfPeople: 1,
     travelchildren: " ",
@@ -22,7 +22,6 @@ export default function PlanificarViaje() {
 
   const {
     register,
-    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<TypeForm>({ defaultValues: initialValues });
@@ -56,45 +55,28 @@ export default function PlanificarViaje() {
           Authorization: `Bearer ${token}`,
         },
       });
- toast.success("Recomendaciones generadas correctamente");
+      
 
-  navigate("/recomendaciones", {
-    state: { recommendations: data.data }, // data es el string de recomendaciones
-  });
-} catch (error: unknown) {
-  // Verifica si es un error de Axios
-  if (isAxiosError(error)) {
-    if (error.response?.data?.message) {
-      toast.error(error.response.data.message);
-    } else {
-      toast.error("Ocurrió un error en la solicitud al servidor.");
+      toast.success(data.message);
+      navigate("/recomendaciones",{
+        state: { recommendations: data.data}
+      })
+    } catch (error) {
+      if (isAxiosError(error) && error.response) {
+        toast.error(error.response.data.message);
+      }
+    } finally{
+      setLoading(false);
     }
-  } else {
-    // Errores inesperados
-    console.error(error);
-    toast.error("Ocurrió un error inesperado.");
-  }
-} finally {
-  setLoading(false); // Siempre desactiva el loading
-}
-    //   toast.success(data.message);
-    //   navigate("/recomendaciones",{
-    //     state: { recommendations: data.recommendations}
-    //   })
-    //   reset();
-    // } catch (error) {
-    //   if (isAxiosError(error) && error.response) {
-    //     toast.error(error.response.data.message);
-    //   } 
-    // }
   };
+
   return (
     <>
       <div className=" bg-slate-800 min-h-screen">
               <h1 className="text-5xl text-white font-bold text-center">
         Planifica tu Viaje
       </h1>
-    
+
       <form
         onSubmit={handleSubmit(enviarFormulario)}
         className="bg-white px-5 py-10 rounded-lg space-y-8 mt-10 max-w-md mx-auto shadow-lg"
@@ -175,6 +157,7 @@ export default function PlanificarViaje() {
           <input
             type="number"
             min={0}
+            step={10000}
             className="bg-slate-100 border-none p-3 rounded-lg"
             {...register("budget", {
               required: "El presupuesto es obligatorio",
@@ -258,6 +241,14 @@ export default function PlanificarViaje() {
           value="Enviar Plan"
         />
       </form>
+              {loading && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-900 bg-opacity-80 z-50">
+            <Loader2 className="animate-spin text-cyan-400 w-16 h-16 mb-4" />
+            <p className="text-white text-xl font-semibold">
+              Generando tus recomendaciones...
+            </p>
+          </div>
+        )}
       </div>
 
     </>

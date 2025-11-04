@@ -24,10 +24,10 @@ export default function Mapa() {
   const { recommendations } = location.state || { recommendations: "" };
 
   const [marcadores, setMarcadores] = useState<Marcador[]>([]);
-  const [fullScreen, setFullScreen] = useState(false);
-  const baseCoords: [number, number] = [-32.8895, -68.8458]; // Mendoza
+  const [fullScreen] = useState(false);
+  const baseCoords: [number, number] = [-32.8895, -68.8458];
 
-  // 📌 Lista fija de Free Walking Tours
+  //Lista fija de Free Walking Tours
   const toursFijos: Marcador[] = [
     {
       texto: "Free Walking Tour - Plaza Independencia",
@@ -44,10 +44,10 @@ export default function Mapa() {
   ];
 
   function extraerLugar(texto: string): string {
-    let limpio = texto.replace(/^\d+\.\s*/, "").trim();
+    let limpio = texto.replace(/^(\d+\.|D[ií]a\s*\d+:)\s*/i, "").trim();
     const match = limpio.match(/\((.*?)\)/);
     if (match) return match[1].trim();
-    limpio = limpio.split(":")[0];
+    limpio = limpio.split(":")[1] || limpio;
     if (/^\$?\d+/.test(limpio)) return "";
     return limpio.trim();
   }
@@ -77,7 +77,11 @@ export default function Mapa() {
 
       const lista: string[] = recommendations
         .split("\n")
-        .filter((line: string) => line.trim() && /^\d+\./.test(line.trim()));
+        .filter(
+          (line: string) =>
+            line.trim() &&
+            ( /^\d+\./.test(line.trim()) || /^D[ií]a\s*\d+:/i.test(line.trim()) )
+        );
 
       const newMarkers: Marcador[] = [];
 
@@ -108,7 +112,6 @@ export default function Mapa() {
         center={baseCoords}
         zoom={12}
         style={{
-          //height: fullScreen ? "100%" : "70vh",
           height: "calc(80vh - 40px)",
           width: fullScreen ? "100%" : "90%",
           margin: "auto",
@@ -120,14 +123,14 @@ export default function Mapa() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {/* 🚩 Marcadores IA */}
+
         {marcadores.map((item, idx) => (
           <Marker key={`ia-${idx}`} position={item.coords} icon={icon}>
             <Popup>{item.texto}</Popup>
           </Marker>
         ))}
 
-        {/* 🚩 Marcadores fijos */}
+
         {toursFijos.map((tour, idx) => (
           <Marker key={`fijo-${idx}`} position={tour.coords} icon={icon}>
             <Popup>{tour.texto}</Popup>
@@ -135,7 +138,7 @@ export default function Mapa() {
         ))}
       </MapContainer>
 
-      {/* 📌 Botonera abajo */}
+
       <div className="flex gap-4 mt-4 w-4/5 justify-center">
         <button
           onClick={() => navigate(-1)}
@@ -143,12 +146,6 @@ export default function Mapa() {
         >
           Volver
         </button>
-        {/* <button
-          onClick={() => setFullScreen(!fullScreen)}
-          className="flex-1 bg-gray-700 px-4 py-2 rounded-lg text-white font-bold shadow"
-        >
-          {fullScreen ? "Reducir" : "Maximizar"}
-        </button> */}
       </div>
     </div>
   );

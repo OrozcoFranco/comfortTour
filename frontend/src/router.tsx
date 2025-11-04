@@ -9,8 +9,9 @@ import FormView from './views/FormView';
 import PrivateRoute from './routes/PrivateRoute';
 import UsersView from './views/UsersView';
 import RecommendationsView from './views/RecommendationsView';
-import Maps from './components/Maps'
-import RecommendationsFree from './components/RecommendationsFree'
+import Maps from './components/Maps';
+import RecommendationsFree from './components/RecommendationsFree';
+import Reserve from './components/Reserve';
 
 export default function Router(){
 
@@ -50,6 +51,11 @@ export default function Router(){
                 <Route path='/freeWalkingTour' element={
                     <PrivateRoute>
                         <RecommendationsFree/>
+                    </PrivateRoute>
+                } />
+                <Route path='/reserve' element={
+                    <PrivateRoute>
+                        <Reserve/>
                     </PrivateRoute>
                 } />
             </Routes>

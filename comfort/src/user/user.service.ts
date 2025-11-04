@@ -14,7 +14,7 @@ export class UsersService {
     ) { }
 
     async savePreferences(userId: string, dto: CreateFormDto) {
-        // Guardar los datos del formulario en MongoDB
+        
         await this.travelModel.create({ ...dto, user: userId });
     }
 
