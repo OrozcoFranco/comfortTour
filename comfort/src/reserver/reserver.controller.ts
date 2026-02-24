@@ -9,7 +9,7 @@ export class ReservasController {
 
 
     @UseGuards(AuthGuard('jwt'))
-    @Post('nuevas')
+    @Post('new')
     async crearReserva(@Body() dto: CreateReservaDto, @Request() req) {
         const userId = req.user.userId;
         return this.reservasService.crearReserva(dto, userId);
@@ -17,7 +17,7 @@ export class ReservasController {
 
 
     @UseGuards(AuthGuard('jwt'))
-    @Get('mias')
+    @Get('reservations')
     async obtenerReservas(@Request() req) {
         const userId = req.user.sub;
         return this.reservasService.obtenerReservasPorUsuario(userId);

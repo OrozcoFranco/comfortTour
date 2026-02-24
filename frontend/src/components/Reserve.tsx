@@ -58,7 +58,7 @@ export default function ReservaView() {
         cantidadPersonas: Number(formData.cantidadPersonas),
       };
 
-      const { data } = await api.post("/reservas/nuevas", payload, {
+      const { data } = await api.post("/reservas/new", payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

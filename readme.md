@@ -13,7 +13,7 @@ A través de un formulario simple, la app recopila datos clave como cantidad de 
 - **Gestión de dependencias:** npm  
 
 ### 1. Clonar el repositorio
-
+https://github.com/OrozcoFranco/comfortTour.git
 ##  Requisitos previos
 Instalar (si vas a usar Docker te hacen falta solo Docker y Git):
 - Git  

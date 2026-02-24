@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, IsEmail, MinLength } from 'class-validator';
 
-export class CreateRegisterDto { //puedo realizar un interface tambien
+export class CreateRegisterDto { //filtra y valida
     @IsString()
     @IsNotEmpty({ message: 'El nombre completo es obligatorio' })
     fullname: string;

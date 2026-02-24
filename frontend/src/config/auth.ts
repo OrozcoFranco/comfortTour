@@ -31,7 +31,7 @@ export async function getProfile() {
 }
 export async function getAuthMe() {
     const token = localStorage.getItem("token");
-    const { data } = await axios.get(`${API}/auth/me`, {
+    const { data } = await axios.get(`${API}/auth/validated`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },

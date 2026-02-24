@@ -9,18 +9,18 @@ export class AuthController {
     constructor(private readonly authService: AuthService) { }
 
     @Post('register')
-    async register(@Body() createRegisterDto: CreateRegisterDto) {
+    async register(@Body() createRegisterDto: CreateRegisterDto) { //recepeción y delegación
         return this.authService.register(createRegisterDto);
     }
 
     @HttpCode(HttpStatus.OK)
-    @Post('login')
+    @Post('login') //recepción y delegación a authservice.ts
     async login(@Body() loginDto: LoginDto) {
         return this.authService.login(loginDto);
     }
 
-    @UseGuards(AuthGuard('jwt'))
-    @Get('me')
+    @UseGuards(AuthGuard('jwt')) // patrón decorador
+    @Get('validated')
     async getProfile(@Request() req) {
         return {
             id: req.user.id,

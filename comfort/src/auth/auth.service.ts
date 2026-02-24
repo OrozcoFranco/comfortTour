@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt'; //librería
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {Login} from '../schemas/login.schema';
@@ -14,7 +14,7 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) { }
 
-    async register(createRegisterDto: CreateRegisterDto) {
+    async register(createRegisterDto: CreateRegisterDto) { //verifica, cifra y crea
         const { fullname, email, password } = createRegisterDto;
 
         const existingUser = await this.userModel.findOne({ email });
@@ -45,12 +45,12 @@ export class AuthService {
     async login(loginDto: LoginDto) {
         const { email, password } = loginDto;
 
-        const user = await this.userModel.findOne({ email });
+        const user = await this.userModel.findOne({ email }); //que coincida con uno guardado
         if (!user) {
             throw new UnauthorizedException('Credenciales inválidas');
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+        const isPasswordValid = await bcrypt.compare(password, user.password); //compara con la hasheada
         if (!isPasswordValid) {
             throw new UnauthorizedException('Credenciales inválidas');
         }

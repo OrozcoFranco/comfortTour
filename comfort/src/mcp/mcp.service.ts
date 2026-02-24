@@ -11,7 +11,7 @@ export class McpService implements OnModuleInit {
     this.mcpServer = await startMcpServer();
   }
 
-  // 🧭 Función auxiliar para determinar estación
+  //Función auxiliar para determinar estación del año y dar recomendaciones para la valija
   private obtenerEstacion(fecha: string): string {
     const month = new Date(fecha).getMonth() + 1;
     if ([12, 1, 2].includes(month)) return "verano";
